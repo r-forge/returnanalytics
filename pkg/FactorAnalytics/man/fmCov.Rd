@@ -11,17 +11,17 @@ fmCov(object, ...)
 
 \method{fmCov}{tsfm}(object, factor.cov, use = "pairwise.complete.obs", ...)
 
-\method{fmCov}{sfm}(object, use = "pairwise.complete.obs", ...)
+\method{fmCov}{sfm}(object, ...)
 
-\method{fmCov}{ffm}(object, use = "pairwise.complete.obs", ...)
+\method{fmCov}{ffm}(object, ...)
 }
 \arguments{
 \item{object}{fit object of class \code{tsfm}, \code{sfm} or \code{ffm}.}
 
 \item{...}{optional arguments passed to \code{\link[stats]{cov}}.}
 
-\item{factor.cov}{factor covariance matrix (optional); defaults to the 
-sample covariance matrix.}
+\item{factor.cov}{optional user specified factor covariance matrix with 
+named columns; defaults to the sample covariance matrix.}
 
 \item{use}{method for computing covariances in the presence of missing 
 values; one of "everything", "all.obs", "complete.obs", "na.or.complete", or 
@@ -52,9 +52,15 @@ And, the \code{N x N} covariance matrix of asset returns is \cr \cr
 where, B is the \code{N x K} matrix of factor betas and \code{D} is a 
 diagonal matrix with \code{sig(i)^2} along the diagonal.
 
-The method for computing covariance can be specified via the \dots 
+For the time series factor model, the user can specify a factor covariance 
+matrix; otherwise the default is to use the sample covariance from factor 
+returns. The method for computing covariance can be specified via the \dots 
 argument. Note that the default of \code{use="pairwise.complete.obs"} for 
 handling NAs restricts the method to "pearson".
+
+For the statistical and fundamental factor model, the factor model 
+covariances already computed via the model fitting functions are simply 
+recalled by this method for user convenience.
 }
 \examples{
 # Time Series Factor model
