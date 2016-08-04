@@ -141,7 +141,7 @@ plot(fit.apca, plot.single=TRUE, asset.name="AFL", which=13)
 
 }
 \author{
-Eric Zivot, Sangeetha Srinivasan and Yi-An Chen
+Eric Zivot, Yi-An Chen and  Sangeetha Srinivasan
 }
 \seealso{
 \code{\link{fitSfm}}, \code{\link{residuals.sfm}}, 

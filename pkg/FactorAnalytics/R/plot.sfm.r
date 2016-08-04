@@ -89,7 +89,7 @@
 #' is \code{TRUE}.
 #' @param ... further arguments to be passed to other plotting functions.
 #' 
-#' @author Eric Zivot, Sangeetha Srinivasan and Yi-An Chen
+#' @author Eric Zivot, Yi-An Chen and  Sangeetha Srinivasan
 #' 
 #' @seealso \code{\link{fitSfm}}, \code{\link{residuals.sfm}}, 
 #' \code{\link{fitted.sfm}}, \code{\link{fmCov.sfm}} and 
@@ -171,9 +171,9 @@ plot.sfm <- function(x, which=NULL, f.sub=1:2, a.sub=1:6, n.top=3,
     den <- density(Residuals)
     xval <- den$x
     den.norm <- dnorm(xval, mean=mean(Residuals), sd=resid.sd)
-    den.st <- dst(xval, dp=st.mple(x=matrix(1,nrow(Residuals)), 
-                                   y=as.vector(Residuals), opt.method="BFGS")$dp)
-    
+    dp.st <- st.mple(x=matrix(1,nrow(Residuals)), y=as.vector(Residuals), opt.method="BFGS")$dp
+    den.st <- dst(xval, dp=dp.st)
+    dp.st <- signif(dp.st, 2)
     # plot selection
     repeat {
       if (is.null(which)) {
@@ -270,6 +270,8 @@ plot.sfm <- function(x, which=NULL, f.sub=1:2, a.sub=1:6, n.top=3,
                lines(xval, den.norm, col=colorset[2], lwd=lwd, lty="dashed")
                legend(x=legend.loc, lty=c("solid","dashed"), col=c(colorset[1:2]), 
                       lwd=lwd, bty="n", legend=c("KDE","Normal"))
+               mtext(text=paste("Normal (mu=",round(mean(Residuals),4),", sd=",
+                                round(resid.sd,4),")",sep=""), side=3, line=0.25, cex=0.8)
              }, "12L" = {
                ## Non-parametric density of residuals with skew-t overlaid
                ymax <- ceiling(max(0,den$y,den.st))
@@ -279,6 +281,8 @@ plot.sfm <- function(x, which=NULL, f.sub=1:2, a.sub=1:6, n.top=3,
                lines(xval, den.st, col=colorset[2], lty="dashed", lwd=lwd)
                legend(x=legend.loc, lty=c("solid","dashed"), col=c(colorset[1:2]), 
                       lwd=lwd, bty="n", legend=c("KDE","Skew-t"))
+               mtext(text=paste("Skew-t (xi=",dp.st[1],", omega=",dp.st[2],", alpha=",dp.st[3],
+                                ", nu=",dp.st[4],")",sep=""), side=3, line=0.25, cex=0.8)
              }, "13L" = {
                ## Histogram of residuals with non-parametric density and normal overlaid
                methods <- c("add.density","add.normal","add.rug")
@@ -287,6 +291,8 @@ plot.sfm <- function(x, which=NULL, f.sub=1:2, a.sub=1:6, n.top=3,
                                lwd=lwd, main=paste("Histogram of residuals:",i), ...)
                legend(x=legend.loc, col=colorset[c(2,3)], lwd=lwd, bty="n", 
                       legend=c("KDE","Normal"))
+               mtext(text=paste("Normal (mu=",round(mean(Residuals),4),", sd=",
+                                round(resid.sd,4),")",sep=""), side=3, line=0.25, cex=0.8)
              }, "14L" = {
                ##  QQ-plot of residuals
                chart.QQPlot(Residuals, envelope=0.95, col=colorset[1:2], lwd=lwd,
