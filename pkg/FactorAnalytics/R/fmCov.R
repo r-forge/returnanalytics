@@ -19,13 +19,19 @@
 #' where, B is the \code{N x K} matrix of factor betas and \code{D} is a 
 #' diagonal matrix with \code{sig(i)^2} along the diagonal.
 #' 
-#' The method for computing covariance can be specified via the \dots 
+#' For the time series factor model, the user can specify a factor covariance 
+#' matrix; otherwise the default is to use the sample covariance from factor 
+#' returns. The method for computing covariance can be specified via the \dots 
 #' argument. Note that the default of \code{use="pairwise.complete.obs"} for 
 #' handling NAs restricts the method to "pearson".
 #' 
+#' For the statistical and fundamental factor model, the factor model 
+#' covariances already computed via the model fitting functions are simply 
+#' recalled by this method for user convenience.
+#' 
 #' @param object fit object of class \code{tsfm}, \code{sfm} or \code{ffm}.
-#' @param factor.cov factor covariance matrix (optional); defaults to the 
-#' sample covariance matrix.
+#' @param factor.cov optional user specified factor covariance matrix with 
+#' named columns; defaults to the sample covariance matrix.
 #' @param use method for computing covariances in the presence of missing 
 #' values; one of "everything", "all.obs", "complete.obs", "na.or.complete", or 
 #' "pairwise.complete.obs". Default is "pairwise.complete.obs".
@@ -92,7 +98,10 @@ fmCov.tsfm <- function(object, factor.cov, use="pairwise.complete.obs", ...) {
   if (missing(factor.cov)) {
     factor.cov = cov(factor, use=use, ...) 
   } else {
-    identical(dim(factor.cov), as.integer(c(ncol(factor), ncol(factor))))
+    if (!identical(dim(factor.cov), as.integer(c(ncol(factor), ncol(factor))))) {
+      stop("Dimensions of user specified factor covariance matrix are not 
+           compatible with the number of factors in the fitTsfm object")
+    }
   }
   
   # residual covariance matrix D
@@ -115,7 +124,7 @@ fmCov.tsfm <- function(object, factor.cov, use="pairwise.complete.obs", ...) {
 #' @method fmCov sfm
 #' @export
 
-fmCov.sfm <- function(object, use="pairwise.complete.obs", ...) {
+fmCov.sfm <- function(object, ...) {
   
   # already computed via fitSfm function
   return(object$Omega)
@@ -125,7 +134,7 @@ fmCov.sfm <- function(object, use="pairwise.complete.obs", ...) {
 #' @method fmCov ffm
 #' @export
 
-fmCov.ffm <- function(object, use="pairwise.complete.obs", ...) {
+fmCov.ffm <- function(object, ...) {
   
   # already computed via fitFfm function
   return(object$return.cov)
