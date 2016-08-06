@@ -74,7 +74,6 @@ calculation of Normal VaR (adapted from a portfolio context to factor models)
 data(managers)
 fit.macro <- fitTsfm(asset.names=colnames(managers[,(1:6)]),
                      factor.names=colnames(managers[,(7:8)]), data=managers)
-                     
 VaR.decomp <- fmVaRDecomp(fit.macro)
 # get the component contributions
 VaR.decomp$cVaR
@@ -82,7 +81,6 @@ VaR.decomp$cVaR
 # Statistical Factor Model
 data(StockReturns)
 sfm.pca.fit <- fitSfm(r.M, k=2)
-
 VaR.decomp <- fmVaRDecomp(sfm.pca.fit, type="normal")
 VaR.decomp$cVaR
 
@@ -91,7 +89,6 @@ data(Stock.df)
 exposure.vars <- c("BOOK2MARKET", "LOG.MARKETCAP")
 fit <- fitFfm(data=stock, asset.var="TICKER", ret.var="RETURN", 
               date.var="DATE", exposure.vars=exposure.vars)
-
 VaR.decomp <- fmVaRDecomp(fit, type="normal")
 VaR.decomp$cVaR
 
