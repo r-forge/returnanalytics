@@ -13,6 +13,14 @@
     }
 }
 
+.onAttach <- function(libname, pkgname) {
+  repo <- "https://github.com/braverock/PerformanceAnalytics"
+  packageStartupMessage(
+    "WARNING: this package was installed from R-Forge, but development has\n",
+    "moved to GitHub. Please re-install the package using the GitHub repo at:\n",
+    repo, ".")
+}
+
 even <- function (x) x%%2==0
 
 odd  <- function (x) x%%2==1
